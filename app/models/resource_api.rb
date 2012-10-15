@@ -1,5 +1,6 @@
 class ResourceAPI
-  BASE_URL = "http://localhost:3000/iphone"
+  HOST = "192.168.1.146:3000"
+  BASE_URL = "http://#{HOST}/iphone"
 
   def self.get(url)
     error = Pointer.new(:object)
