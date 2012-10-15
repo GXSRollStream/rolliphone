@@ -1,12 +1,9 @@
 class OrganizationsController < BaseResourceController
-  def viewDidLoad
-    super
-    self.tabBarItem = UITabBarItem.alloc.initWithTitle('Companies', image:nil, tag:2)
-  end
-
   def init
     if super
       @resource_klass = Organization 
+      self.tabBarItem = UITabBarItem.alloc.initWithTitle('Companies', image:'company.png'.uiimage, tag:1)
+      self.title = "Companies"
     end
 
     self

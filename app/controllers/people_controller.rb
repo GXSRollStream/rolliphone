@@ -2,14 +2,11 @@ class PeopleController < BaseResourceController
   def init
     if super
       @resource_klass = Contact
+      self.tabBarItem = UITabBarItem.alloc.initWithTitle('Contacts', image:"contact.png".uiimage, tag:1)
+      self.title = "Contacts"
     end
 
     self
-  end
-
-  def viewDidLoad
-    super
-    self.tabBarItem = UITabBarItem.alloc.initWithTitle('Contacts', image:nil, tag:1)
   end
 
   def load_controller(resource)

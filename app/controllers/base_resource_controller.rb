@@ -16,16 +16,9 @@ class BaseResourceController < UITableViewController
     cell = tableView.dequeueReusableCellWithIdentifier(CellID) || UITableViewCell.alloc.initWithStyle(UITableViewCellStyleSubtitle, reuseIdentifier:CellID)
     resource = @resources[indexPath.row]
     resource.construct_cell(cell)
+    cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton
 
     cell
-  end
-
-  def tableView(tableView, editingStyleForRowAtIndexPath:indexPath)
-    UITableViewCellEditingStyleDelete
-  end
-
-  def tableView(tableView, commitEditingStyle:editingStyle, forRowAtIndexPath:indexPath)
-    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation:UITableViewRowAnimationFade)
   end
 
   def tableView(tableView, didSelectRowAtIndexPath:indexPath)

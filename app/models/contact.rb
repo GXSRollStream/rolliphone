@@ -1,8 +1,30 @@
 class Contact
-  attr_accessor :first_name, :last_name
+  ATTRIBUTES = [ 
+                :first_name, 
+                :last_name, 
+                :email,
+                :created_at,
+                :updated_at,
+                :disabled_at,
+                :address_city, 
+                :address_state, 
+                :address_zip, 
+                :address_country, 
+                :address_line1, 
+                :address_line2, 
+                :address_line3,
+                :fax,
+                :mobile_phone,
+                :work_phone 
+              ]
+
+  attr_reader *ATTRIBUTES
+
+
   def initialize(attrs)
-    @first_name = attrs['first_name']
-    @last_name = attrs['last_name']
+    attrs.each_pair do | key, value |
+      instance_variable_set("@#{key}", value)
+    end
   end
 
   def self.load
@@ -10,7 +32,11 @@ class Contact
   end
 
   def construct_cell(cell)
-    cell.textLabel.text = last_name
-    cell.detailTextLabel.text = first_name
+    cell.textLabel.text = full_name
+    cell.detailTextLabel.text = email
+  end
+
+  def full_name
+    "#{first_name} #{last_name}"
   end
 end
