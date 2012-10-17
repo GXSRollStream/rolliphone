@@ -53,11 +53,11 @@ module AddressBook
       error = nil
       address_book = ABAddressBookCreate()
 
-      ABAddressBookCopyArrayOfAllGroups(address_book).detect do | group |
+      ABAddressBookCopyArrayOfAllGroups(address_book).each do | group |
         ABAddressBookRemoveRecord(address_book, group, error)
       end 
 
-      ABAddressBookCopyArrayOfAllPeople(address_book).detect do | group |
+      ABAddressBookCopyArrayOfAllPeople(address_book).each do | group |
         ABAddressBookRemoveRecord(address_book, group, error)
       end 
 
@@ -267,6 +267,16 @@ module AddressBook
       set_field(KABPersonDepartmentProperty,   attributes[:department  ]) unless attributes[:department  ].nil?
       set_field(KABPersonOrganizationProperty, attributes[:organization]) unless attributes[:organization].nil?
       set_multi_field(KABPersonPhoneProperty,  :mobile => attributes[:mobile_phone], :work => attributes[:office_phone])
+      address = ABMultiValueCreateMutable(KABMultiDictionaryPropertyType)
+      dict = NSMutableDictionary.alloc.init
+      dict.setObject(attributes[:address_line1], forKey:KABPersonAddressStreetKey) unless attributes[:address_line1].nil?
+      dict.setObject(attributes[:address_city], forKey:KABPersonAddressCityKey) unless attributes[:address_city].nil?
+      dict.setObject(attributes[:address_state], forKey:KABPersonAddressStateKey) unless attributes[:address_state].nil?
+      dict.setObject(attributes[:address_zip], forKey:KABPersonAddressZIPKey) unless attributes[:address_zip].nil?
+      dict.setObject(attributes[:address_country], forKey:KABPersonAddressCountryKey) unless attributes[:address_country].nil?
+      ABMultiValueAddValueAndLabel(address, dict, KABWorkLabel, nil)
+      ABRecordSetValue(ab_person, KABPersonAddressProperty, address,error)
+
       set_multi_field(KABPersonEmailProperty,  :work => attributes[:email])
     end
 
