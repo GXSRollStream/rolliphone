@@ -12,21 +12,29 @@ class Organization
                 :address_line1, 
                 :address_line2, 
                 :address_line3,
+                :email,
                 :fax,
                 :phone 
               ]
 
   attr_reader *ATTRIBUTES
 
+  @@group_name = "GXS-Companies"
 
   def initialize(attrs)
     attrs.each_pair do | key, value |
       instance_variable_set("@#{key}", value)
     end
+    save
   end
 
   def self.load
+    AddressBook::Person.drop_group(@@group_name)
     ResourceAPI.get('organizations.json').map { |r| Organization.new(r) }
+  end
+
+  def save
+    AddressBook::Person.create(group_name: @@group_name, first_name: name, last_name: company_id, office_phone: phone, email: email)
   end
 
   def construct_cell(cell)

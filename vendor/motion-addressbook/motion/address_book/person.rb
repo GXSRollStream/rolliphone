@@ -1,8 +1,9 @@
 module AddressBook
   class Person
-    attr_reader :attributes, :error, :ab_person
+    attr_reader :attributes, :error, :ab_person, :group_name
 
     def initialize(attributes={}, existing_ab_person = nil)
+      @group_name = attributes.delete(:group_name)
       @attributes = attributes
       if existing_ab_person.nil?
         @new_record = true
@@ -44,15 +45,30 @@ module AddressBook
 
     def load_group
       ABAddressBookCopyArrayOfAllGroups(address_book).detect do | group |
-        ABRecordCopyValue(group, KABGroupNameProperty) == "Rollstream"
+        ABRecordCopyValue(group, KABGroupNameProperty) == group_name
       end 
     end
 
-    def self.drop_group
+    def self.clean
+      error = nil
+      address_book = ABAddressBookCreate()
+
+      ABAddressBookCopyArrayOfAllGroups(address_book).detect do | group |
+        ABAddressBookRemoveRecord(address_book, group, error)
+      end 
+
+      ABAddressBookCopyArrayOfAllPeople(address_book).detect do | group |
+        ABAddressBookRemoveRecord(address_book, group, error)
+      end 
+
+      ABAddressBookSave(address_book, error)
+    end
+
+    def self.drop_group(name)
       error = nil
       address_book = ABAddressBookCreate()
       group = ABAddressBookCopyArrayOfAllGroups(address_book).detect do | group |
-        ABRecordCopyValue(group, KABGroupNameProperty) == "Rollstream"
+        ABRecordCopyValue(group, KABGroupNameProperty) == name
       end 
 
       if group 
@@ -63,7 +79,7 @@ module AddressBook
 
     def create_group
       group = ABGroupCreate()
-      ABRecordSetValue(group, KABGroupNameProperty,"Rollstream", error)
+      ABRecordSetValue(group, KABGroupNameProperty, group_name, error)
       ABAddressBookAddRecord(address_book, group, error)
       ABAddressBookSave(address_book, error)
       group

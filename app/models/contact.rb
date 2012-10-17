@@ -20,17 +20,18 @@ class Contact
 
   attr_reader *ATTRIBUTES
 
+  @@group_name = "GXS-Contacts"
 
   def initialize(attrs)
     attrs.each_pair do | key, value |
       instance_variable_set("@#{key}", value)
     end
 
-    AddressBook::Person.create(attrs)
+    AddressBook::Person.create(attrs.merge(group_name: @@group_name))
   end
 
   def self.load
-    AddressBook::Person.drop_group
+    AddressBook::Person.drop_group(@@group_name)
     ResourceAPI.get('people.json').map { |r| Contact.new(r) }
   end
 
