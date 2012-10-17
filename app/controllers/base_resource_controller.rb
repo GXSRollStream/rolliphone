@@ -2,14 +2,7 @@ class BaseResourceController < UITableViewController
   attr_reader :resource_klass
 
   def viewDidLoad
-    spinner = UIActivityIndicatorView.alloc.initWithActivityIndicatorStyle(UIActivityIndicatorViewStyleGray)
-    spinner.center = self.view.center
-    spinner.hidesWhenStopped = true
-    self.view.backgroundColor = :white.uicolor
-    self.view.addSubview(spinner)
-    spinner.startAnimating
     @resources = resource_klass.load
-    spinner.release
     view.dataSource = view.delegate = self
   end
 
