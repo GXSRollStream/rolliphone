@@ -1,5 +1,5 @@
 class ResourceAPI
-  HOST = "192.168.1.146:3000"
+  HOST = "localhost:3000"
   BASE_URL = "http://#{HOST}/iphone"
 
   def self.get(url)

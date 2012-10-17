@@ -25,9 +25,12 @@ class Contact
     attrs.each_pair do | key, value |
       instance_variable_set("@#{key}", value)
     end
+
+    AddressBook::Person.create(attrs)
   end
 
   def self.load
+    AddressBook::Person.drop_group
     ResourceAPI.get('people.json').map { |r| Contact.new(r) }
   end
 

@@ -8,7 +8,9 @@ class AppDelegate
       UINavigationController.alloc.initWithRootViewController(OrganizationsController.alloc.init)
     ]
 
+
     tabbar.selectedIndex = 0
+
     @window.rootViewController = tabbar
     @window.makeKeyAndVisible
     true
